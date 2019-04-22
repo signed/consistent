@@ -1,18 +1,22 @@
 import * as fs from 'fs';
-import { camelCase, pascalCase, kebabCase } from 'change-case';
+import {camelCase, kebabCase, pascalCase} from 'change-case';
 
 const ignoredDirectoryNames: Array<string> = ['.git', '.github', 'node_modules'];
 const fileExtensionsToConsider = ['ts', 'js', 'tsx', 'jsx', 'snap'];
-const fileExtensionsToDrop = ['test', 'tests', 'spec', 'specs'].concat(fileExtensionsToConsider);
+const fileExtensionsToDrop = ['test', 'tests', 'spec', 'specs', 'mock'].concat(fileExtensionsToConsider);
 
-enum Case {
-    Pascal,
-    Camel,
-    Kebab
+export enum Case {
+    Pascal = 'Pascal',
+    Camel = 'Camel',
+    Kebab = 'Kebab'
 }
 
-class CaseReport {
+export class CaseReport {
     constructor(public directory: string, public filenameWithExtensions: string, public fileName: string, public cases: Array<Case>) {
+    }
+
+    fullQualified(): string {
+        return this.directory + '/' + this.filenameWithExtensions
     }
 }
 
@@ -55,7 +59,8 @@ export const walk = (dir: string): Array<CaseReport> => {
                 if (withoutExtensions === kebabCase(withoutExtensions)) {
                     cases.push(Case.Kebab);
                 }
-                results.push(new CaseReport(dir, segment, withoutExtensions, cases));
+                let caseReport = new CaseReport(dir, segment, withoutExtensions, cases);
+                results.push(caseReport);
             }
         } else {
             throw new Error(fullPath + ' is not file nor a directory');
@@ -63,3 +68,12 @@ export const walk = (dir: string): Array<CaseReport> => {
     });
     return results;
 };
+
+function compatibleWith(result: Array<CaseReport>, cased: Case) {
+    return result.filter(it => it.cases.includes(cased));
+}
+
+export function consistentWithReportLine(result: Array<CaseReport>, cased: Case) {
+    let kebabCase = compatibleWith(result, cased);
+    return cased + ' ' + result.length + '/' + kebabCase.length + '/' + (result.length - kebabCase.length);
+}
