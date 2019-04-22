@@ -1,4 +1,4 @@
-import { camelCase, kebabCase, pascalCase } from 'change-case';
+import {camelCase, kebabCase, pascalCase} from 'change-case';
 import * as fs from 'fs';
 
 const ignoredDirectoryNames: Array<string> = ['.git', '.github', 'node_modules', 'coverage', 'out', 'dist'];
@@ -50,8 +50,8 @@ const enumToFunction = (cased: Case): (anyCase: string) => string => {
 
 export function sideBySide(report: CaseReport, cases: Array<Case>): string {
     const fileName = filenameWithoutExtension(report.fileName);
-    const flup = cases.map(it => enumToFunction(it)(fileName) + report.extensions()).join(' | ');
-    return report.fullQualified() + ' => ' +flup;
+    const flup = cases.map(it => enumToFunction(it)(fileName) + report.extensions()).join('\n\t');
+    return report.fullQualified() + ':\n\t' + flup + '\n';
 }
 
 export const walk = (dir: string): Array<CaseReport> => {
