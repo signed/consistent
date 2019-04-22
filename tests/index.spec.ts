@@ -1,11 +1,4 @@
-import { camelCase } from 'change-case';
 import { filenameWithoutExtension, walk } from '../src/index';
-
-describe('hello world', () => {
-    it('should greet the parameter', () => {
-        expect(camelCase('you-jump')).toEqual('youJump');
-    });
-});
 
 describe('filenameWithoutExtension', () => {
     it('should drop single extension', () => {
