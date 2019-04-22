@@ -1,7 +1,7 @@
+import { camelCase, kebabCase, pascalCase } from 'change-case';
 import * as fs from 'fs';
-import {camelCase, kebabCase, pascalCase} from 'change-case';
 
-const ignoredDirectoryNames: Array<string> = ['.git', '.github', 'node_modules'];
+const ignoredDirectoryNames: Array<string> = ['.git', '.github', 'node_modules', 'coverage', 'out', 'dist'];
 const fileExtensionsToConsider = ['ts', 'js', 'tsx', 'jsx', 'snap'];
 const fileExtensionsToDrop = ['test', 'tests', 'spec', 'specs', 'mock'].concat(fileExtensionsToConsider);
 
@@ -15,8 +15,12 @@ export class CaseReport {
     constructor(public directory: string, public filenameWithExtensions: string, public fileName: string, public cases: Array<Case>) {
     }
 
+    extensions(): string {
+        return this.filenameWithExtensions.replace(this.fileName, '');
+    }
+
     fullQualified(): string {
-        return this.directory + '/' + this.filenameWithExtensions
+        return this.directory + '/' + this.filenameWithExtensions;
     }
 }
 
@@ -31,6 +35,23 @@ export function filenameWithoutExtension(segment: string): string {
         }
     }
     return withoutExtensions;
+}
+
+const enumToFunction = (cased: Case): (anyCase: string) => string => {
+    switch (cased) {
+        case Case.Kebab:
+            return kebabCase;
+        case Case.Camel:
+            return camelCase;
+        case Case.Pascal:
+            return pascalCase;
+    }
+};
+
+export function sideBySide(report: CaseReport, cases: Array<Case>): string {
+    const fileName = filenameWithoutExtension(report.fileName);
+    const flup = cases.map(it => enumToFunction(it)(fileName) + report.extensions()).join(' | ');
+    return report.fullQualified() + ' => ' +flup;
 }
 
 export const walk = (dir: string): Array<CaseReport> => {
