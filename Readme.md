@@ -1,0 +1,5 @@
+* [jscodeshift](https://github.com/facebook/jscodeshift)
+* [recast](https://github.com/benjamn/recast)
+* [lodash case](https://lodash.com/docs#startCase)
+* [change-case](https://github.com/blakeembrey/change-case)
+* [case detection](https://github.com/google/guava/issues/2212#issuecomment-358368610)
