@@ -9,11 +9,11 @@
     "run:index": "ts-node src/index.ts"
   },
   "devDependencies": {
-    "@types/jest": "24.0.11",
-    "@types/node": "11.13.6",
-    "jest": "24.7.1",
+    "@types/jest": "24.0.15",
+    "@types/node": "12.6.8",
+    "jest": "24.8.0",
     "ts-jest": "24.0.2",
-    "typescript": "3.4.4"
+    "typescript": "3.5.3"
   },
   "jest": {
     "globals": {
@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "change-case": "3.1.0",
-    "ts-node": "8.1.0"
+    "ts-node": "8.3.0"
   }
 }
