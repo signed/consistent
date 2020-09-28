@@ -1,4 +1,4 @@
-import {camelCase, kebabCase, pascalCase} from 'change-case';
+import {camelCase, paramCase as kebabCase, pascalCase} from 'change-case';
 import * as fs from 'fs';
 
 const ignoredDirectoryNames: Array<string> = ['.git', '.github', 'node_modules', 'coverage', 'out', 'dist'];
